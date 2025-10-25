@@ -548,7 +548,7 @@ if want_output
     endif
 endif
 
-subdir('example')
+#subdir('example')
 
 if want_docs or want_python
     subdir('doc')
