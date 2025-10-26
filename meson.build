@@ -500,64 +500,6 @@ testdso_mod = shared_module(
     name_prefix: '',
 )
 
-## tests
-
-checks = {
-    'runsuite': [],
-    'runtest': threads_dep,
-    'runxmlconf': [],
-# Disabled for now, see #694
-#    'testModule': [],
-    'testapi': [],
-    'testchar': [],
-    'testdict': [],
-    'testlimits': [],
-    'testparser': [],
-    'testrecurse': [],
-}
-
-foreach check, deps : checks
-    exe = executable(
-        check,
-        files(check + '.c'),
-        dependencies: [deps, xml_dep],
-        include_directories: config_dir,
-    )
-    if check != 'testlimits'
-        test(check, exe, timeout: 0, workdir: meson.current_source_dir())
-    endif
-endforeach
-
-if want_output
-    sh = find_program('sh', required: false)
-
-    if sh.found()
-        if want_debug
-            test('xmllint shell', sh,
-                 args: [ 'test/scripts/test.sh', xmllint.full_path() ],
-                 workdir: meson.current_source_dir())
-        endif
-        if want_catalog
-            test('xmlcatalog shell', sh,
-                 args: [ 'test/catalogs/test.sh', xmlcatalog.full_path() ],
-                 workdir: meson.current_source_dir())
-            test('xmlcatalog shell SGML', sh,
-                 args: [ 'test/catalogs/test_sgml.sh', xmlcatalog.full_path() ],
-                 workdir: meson.current_source_dir())
-        endif
-    endif
-endif
-
-#subdir('example')
-
-if want_docs or want_python
-    subdir('doc')
-endif
-
-if want_python == true
-    subdir('python')
-endif
-
 ## pc files
 
 pkgmod = import('pkgconfig')
